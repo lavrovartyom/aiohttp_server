@@ -1,10 +1,16 @@
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey
 import psycopg2
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+import os
+from dotenv import load_dotenv
 
-engine = create_engine('postgresql+psycopg2://postgres:4322@localhost/postgres')
-connection = psycopg2.connect(user="postgres", password="4322")
+load_dotenv()
 
+
+SQLALCHEMY_DATABASE_URL = os.getenv('SQLALCHEMY_DATABASE_URL')
+
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+connection = psycopg2.connect(user=os.getenv('USER'), password=os.getenv("PASSWORD"))
 Session = sessionmaker(bind=engine)
 session = Session()
 
