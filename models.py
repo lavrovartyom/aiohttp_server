@@ -1,16 +1,17 @@
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey
 import psycopg2
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship
-import os
-from dotenv import load_dotenv
+from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.ext.declarative import declarative_base
+from environs import Env
 
-load_dotenv()
+env = Env()
+env.read_env()
 
 
-SQLALCHEMY_DATABASE_URL = os.getenv('SQLALCHEMY_DATABASE_URL')
+SQLALCHEMY_DATABASE_URL = env.str('SQLALCHEMY_DATABASE_URL')
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
-connection = psycopg2.connect(user=os.getenv('USER'), password=os.getenv("PASSWORD"))
+connection = psycopg2.connect(user=env.str('USER'), password=env.str('PASSWORD'))
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -24,11 +25,11 @@ class User(Base):
 	id = Column(Integer, primary_key=True)
 	first_name = Column(String(50))
 	last_name = Column(String(50))
-	login = Column(String(50))
-	password = Column(String(500), nullable=True)
+	login = Column(String(50), unique=True)
+	password = Column(String(500), nullable=False)
 	date_of_birth = Column(DateTime)
-	permission_id = Column(Integer, ForeignKey('permission.id'))
-	user_permission = relationship('Permission')
+	permission = Column(Integer, ForeignKey('permission.id'), nullable=False)
+	relation_permission = relationship('Permission')
 
 	def __repr__(self):
 		return f'{self.id}, {self.first_name}, {self.last_name}'
@@ -39,10 +40,7 @@ class Permission(Base):
 	__tablename__ = 'permission'
 
 	id = Column(Integer, primary_key=True)
-	permission = Column(String(25))
+	permission = Column(String(25), unique=True)
 
 	def __repr__(self):
 		return f'{self.permission}'
-
-
-Base.metadata.create_all()
