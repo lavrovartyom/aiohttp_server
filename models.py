@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey
 import psycopg2
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -27,7 +27,7 @@ class User(Base):
 	last_name = Column(String(50))
 	login = Column(String(50), unique=True)
 	password = Column(String(500), nullable=False)
-	date_of_birth = Column(DateTime)
+	date_of_birth = Column(Date)
 	permission = Column(Integer, ForeignKey('permission.id'), nullable=False)
 	relation_permission = relationship('Permission')
 
@@ -44,3 +44,10 @@ class Permission(Base):
 
 	def __repr__(self):
 		return f'{self.permission}'
+
+
+def create():
+	with session.begin():
+		session.query(Permission).filter(
+			Permission.permission
+		)
