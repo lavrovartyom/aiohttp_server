@@ -44,10 +44,3 @@ class Permission(Base):
 
 	def __repr__(self):
 		return f'{self.permission}'
-
-
-def create():
-	with session.begin():
-		session.query(Permission).filter(
-			Permission.permission
-		)
