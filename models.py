@@ -1,21 +1,6 @@
-from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey
-import psycopg2
-from sqlalchemy.orm import sessionmaker, relationship
-from sqlalchemy.ext.declarative import declarative_base
-from environs import Env
-
-env = Env()
-env.read_env()
-
-
-SQLALCHEMY_DATABASE_URL = env.str('SQLALCHEMY_DATABASE_URL')
-
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-connection = psycopg2.connect(user=env.str('USER'), password=env.str('PASSWORD'))
-Session = sessionmaker(bind=engine)
-session = Session()
-
-Base = declarative_base(bind=engine)
+from sqlalchemy import Column, Integer, String, Date, ForeignKey
+from sqlalchemy.orm import relationship
+from db import Base
 
 
 class User(Base):
