@@ -1,10 +1,12 @@
 from pydantic import BaseModel
+from datetime import date
 
 
 class BaseUser(BaseModel):
 	first_name: str
 	last_name: str
 	login: str
+	date_of_birth: date
 	permission: int
 
 

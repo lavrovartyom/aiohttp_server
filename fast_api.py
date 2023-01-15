@@ -24,3 +24,5 @@ async def create_user(user: schemas.UserIn):
 	with session.begin():
 		session.add(new_user)
 	return new_user
+
+
