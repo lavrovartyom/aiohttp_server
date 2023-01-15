@@ -17,7 +17,10 @@ class User(Base):
 	relation_permission = relationship('Permission')
 
 	def __repr__(self):
-		return f'{self.id}, {self.first_name}, {self.last_name}'
+		return f'{self.id}, {self.first_name}, {self.last_name}, {self.login}, {self.date_of_birth}, {self.permission}'
+
+	def to_json(self):
+		return {user.name: getattr(self, user.name) for user in self.__table__.columns}
 
 
 class Permission(Base):
