@@ -6,7 +6,7 @@ class BaseUser(BaseModel):
 	first_name: str
 	last_name: str
 	login: str
-	date_of_birth: date
+	# date_of_birth: date
 	permission: int
 
 

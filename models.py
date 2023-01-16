@@ -19,8 +19,16 @@ class User(Base):
 	def __repr__(self):
 		return f'{self.id}, {self.first_name}, {self.last_name}, {self.login}, {self.date_of_birth}, {self.permission}'
 
-	def to_json(self):
-		return {user.name: getattr(self, user.name) for user in self.__table__.columns}
+	@property
+	def serialize(self):
+		return {
+			'id': self.id,
+			'first_name': self.first_name,
+			'last_name': self.last_name,
+			'login': self.login,
+			'date_of_birth': str(self.date_of_birth),
+			'permission': self.permission,
+		}
 
 
 class Permission(Base):
