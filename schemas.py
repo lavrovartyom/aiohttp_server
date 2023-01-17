@@ -9,6 +9,9 @@ class BaseUser(BaseModel):
 	# date_of_birth: date
 	permission: int
 
+	class Config:
+		orm_mode = True
+
 
 class UserIn(BaseUser):
 	password: str
@@ -17,5 +20,3 @@ class UserIn(BaseUser):
 class UserOut(BaseUser):
 	id: int
 
-	class Config:
-		orm_mode = True

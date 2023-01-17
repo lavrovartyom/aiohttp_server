@@ -26,3 +26,4 @@ async def create_user(user: schemas.UserIn):
 	return new_user
 
 
+
