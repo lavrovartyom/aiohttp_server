@@ -19,4 +19,3 @@ class UserIn(BaseUser):
 
 class UserOut(BaseUser):
 	id: int
-
