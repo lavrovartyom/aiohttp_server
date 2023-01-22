@@ -7,6 +7,7 @@ from aiohttp_pydantic import PydanticView
 import schemas
 from typing import List
 from aiohttp_pydantic.oas.typing import r200, r201, r202
+from logic import hash_password
 
 
 routes = web.RouteTableDef()
@@ -31,6 +32,7 @@ class UserView(PydanticView):
         :return: json response
         """
         new_user = User(**user.dict())
+        new_user.password = hash_password(new_user.password)
         try:
             with session.begin():
                 session.add(new_user)
@@ -59,13 +61,14 @@ class UserView(PydanticView):
                     User.first_name: user.first_name,
                     User.last_name: user.last_name,
                     User.login: user.login,
+                    User.date_of_birth: user.date_of_birth,
                     User.permission: user.permission
                 }
             )
             session.commit()
-            return web.json_response({'Пользователь обновлен': user.dict()}, content_type='application/json')
+            return web.json_response({'Пользователь обновлен': user.dict()}, content_type='application/json', status=200)
         except (IntegrityError, UniqueViolation) as exc:
-            web.json_response(text=f'{exc}', content_type='application/json', status=200)
+            web.json_response(text=f'{exc}', content_type='application/json')
 
     async def patch(self, id: int):
         pass
@@ -76,7 +79,7 @@ async def get_user(request) -> r200[List[schemas.UserOut]]:
     """
     Обработчик для получения пользователя по идентификатору
     """
-    user = await session.query(User).where(User.id == request.match_info['user_id']).one_or_none()
+    user = session.query(User).where(User.id == request.match_info['user_id']).one_or_none()
     if user:
         result = schemas.UserOut.from_orm(user).dict()
         return web.json_response(result, content_type='application/json', status=200)

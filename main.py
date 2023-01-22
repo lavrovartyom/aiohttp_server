@@ -3,8 +3,8 @@ from app.handlers import routes
 
 
 app = Application()
+app.add_routes(routes)
 
 
 if __name__ == '__main__':
-    app.add_routes(routes)
     run_app(app)
