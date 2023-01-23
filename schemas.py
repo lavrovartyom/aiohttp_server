@@ -7,7 +7,7 @@ class BaseUser(BaseModel):
 	last_name: str
 	login: str
 	date_of_birth: date
-	permission: int
+	permission: str
 
 	@validator('date_of_birth', each_item=True)
 	def return_date(cls, date_of_birth):
@@ -23,3 +23,7 @@ class UserIn(BaseUser):
 
 class UserOut(BaseUser):
 	id: int
+
+
+class UserLogin(BaseUser):
+	pass

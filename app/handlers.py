@@ -56,17 +56,18 @@ class UserView(PydanticView):
         :return: json response
         """
         try:
-            session.query(User).filter(User.id == id).update(
-                {
-                    User.first_name: user.first_name,
-                    User.last_name: user.last_name,
-                    User.login: user.login,
-                    User.date_of_birth: user.date_of_birth,
-                    User.permission: user.permission
-                }
-            )
-            session.commit()
-            return web.json_response({'Пользователь обновлен': user.dict()}, content_type='application/json', status=200)
+            with session.begin():
+                session.query(User).filter(User.id == id).update(
+                    {
+                        User.first_name: user.first_name,
+                        User.last_name: user.last_name,
+                        User.login: user.login,
+                        User.date_of_birth: user.date_of_birth,
+                        User.permission: user.permission
+                    }
+                )
+                session.commit()
+                return web.json_response({'Пользователь обновлен': user.dict()}, content_type='application/json', status=200)
         except (IntegrityError, UniqueViolation) as exc:
             web.json_response(text=f'{exc}', content_type='application/json')
 
@@ -86,3 +87,9 @@ async def get_user(request) -> r200[List[schemas.UserOut]]:
 
     return web.json_response(text='Пользователь не найден', content_type='application/json', status=200)
 
+
+@routes.post('/login')
+async def login(request):
+    """ Авторизация пользователя по логину и паролю """
+
+    return web.json_response('ok')

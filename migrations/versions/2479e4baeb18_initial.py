@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: 443f6cf9f620
-Revises: 0dad2b1c8ad3
-Create Date: 2023-01-14 00:35:53.255777
+Revision ID: 2479e4baeb18
+Revises: fb712e94a930
+Create Date: 2023-01-23 22:58:05.353125
 
 """
 from alembic import op
@@ -10,11 +10,11 @@ import sqlalchemy as sa
 import datetime
 from db import session
 from models import Permission, User
-
+from app.logic import hash_password
 
 # revision identifiers, used by Alembic.
-revision = '443f6cf9f620'
-down_revision = '0dad2b1c8ad3'
+revision = '2479e4baeb18'
+down_revision = 'fb712e94a930'
 branch_labels = None
 depends_on = None
 
@@ -23,6 +23,7 @@ def upgrade() -> None:
     """
     Миграция для создания администратора, а также прав пользователя
     """
+    hashing_password = hash_password('admin')
     with session.begin():
         session.add_all(
             [
@@ -36,9 +37,9 @@ def upgrade() -> None:
             first_name='admin',
             last_name='admin',
             login='admin',
-            password='admin',
+            password=hashing_password,
             date_of_birth=datetime.date(1970, 1, 1),
-            permission=1
+            permission='Администратор'
         )
         session.add(admin_user)
         session.commit()

@@ -7,28 +7,17 @@ class User(Base):
 	""" Модель пользователя  """
 	__tablename__ = 'user'
 
-	id = Column(Integer, primary_key=True)
+	id = Column(Integer, primary_key=True, autoincrement=True)
 	first_name = Column(String(50))
 	last_name = Column(String(50))
 	login = Column(String(50), unique=True)
 	password = Column(String(500), nullable=False)
 	date_of_birth = Column(Date)
-	permission = Column(Integer, ForeignKey('permission.id'), nullable=False)
-	relation_permission = relationship('Permission')
+	permission = Column(String, ForeignKey('permission.permission'), nullable=False)
+	permission_table = relationship('Permission', back_populates='user_table')
 
 	def __repr__(self):
 		return f'{self.id}, {self.first_name}, {self.last_name}, {self.login}, {self.date_of_birth}, {self.permission}'
-
-	@property
-	def serialize(self):
-		return {
-			'id': self.id,
-			'first_name': self.first_name,
-			'last_name': self.last_name,
-			'login': self.login,
-			'date_of_birth': str(self.date_of_birth),
-			'permission': self.permission,
-		}
 
 
 class Permission(Base):
@@ -36,7 +25,9 @@ class Permission(Base):
 	__tablename__ = 'permission'
 
 	id = Column(Integer, primary_key=True)
-	permission = Column(String(25), unique=True)
+	permission = Column(String(25), unique=True, nullable=False)
+	user_table = relationship("User", back_populates="permission_table", cascade="all, delete-orphan")
 
 	def __repr__(self):
 		return f'{self.permission}'
+
