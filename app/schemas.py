@@ -25,5 +25,9 @@ class UserOut(BaseUser):
 	id: int
 
 
-class UserLogin(BaseUser):
-	pass
+class Authorization(BaseModel):
+	login: str
+	password: str
+
+	class Config:
+		orm_mode = True
