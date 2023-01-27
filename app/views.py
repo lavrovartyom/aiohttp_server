@@ -80,6 +80,7 @@ async def get_user(request) -> r200[List[schemas.UserOut]]:
     """
     Обработчик для получения пользователя по идентификатору
     """
+    await check_permission(request, 'reading')
     user = session.query(User).where(User.id == request.match_info['user_id']).one_or_none()
     if user:
         result = schemas.UserOut.from_orm(user).dict()
