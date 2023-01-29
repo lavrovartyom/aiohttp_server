@@ -14,7 +14,6 @@ from auth_policy import check_credentials
 
 
 class UserView(PydanticView):
-
     async def get(self) -> r200[List[schemas.UserOut]]:
         """
         Метод для получения всеx пользователей
@@ -71,15 +70,15 @@ class UserView(PydanticView):
                 }
             )
             session.commit()
-            return web.json_response({'Пользователь обновлен': user.dict()}, content_type='application/json', status=200)
+            return web.json_response(
+                {'Пользователь обновлен': user.dict()}, content_type='application/json', status=200
+            )
         except (IntegrityError, UniqueViolation) as exc:
             web.json_response(text=f'{exc}', content_type='application/json')
 
 
 async def get_user(request) -> r200[List[schemas.UserOut]]:
-    """
-    Обработчик для получения пользователя по идентификатору
-    """
+    """ Обработчик для получения пользователя по идентификатору """
     await check_permission(request, 'reading')
     user = session.query(User).where(User.id == request.match_info['user_id']).one_or_none()
     if user:
