@@ -10,8 +10,8 @@ COPY .env /aiohttp_server/
 
 RUN pip install -r /aiohttp_server/requirements.txt
 
-EXPOSE 80:80
+WORKDIR /aiohttp_server/app
 
-ENTRYPOINT ["python", "aiohttp_server/app/main.py"]
+EXPOSE 8080
 
-
+#ENTRYPOINT ["python", "aiohttp_server/app/main.py"]

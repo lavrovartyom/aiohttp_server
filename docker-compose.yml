@@ -1,6 +1,23 @@
 services:
   aiohttp-server:
     build: .
+    container_name: aiohttp-server
     ports:
-      - "8000:8000"
+      - "8080:8080"
+    depends_on:
+      - pg-database
+    environment:
+      - DB_HOST=pg-database
+      - DB_NAME=dbname
+      - DB_USER=dbuser
+      - DB_PASS=pass
+    command: >
+      sh -c "python main.py"
 
+  pg-database:
+    image: postgres:14.6-alpine
+    environment:
+      - POSTGRES_DB=dbname
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=pass
+    container_name: pg-database
