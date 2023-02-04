@@ -14,7 +14,7 @@ from passlib.hash import pbkdf2_sha256
 revision = '2479e4baeb18'
 down_revision = 'fb712e94a930'
 branch_labels = None
-depends_on = None
+depends_on = 'fb712e94a930'
 
 
 def upgrade() -> None:
@@ -48,6 +48,6 @@ def downgrade() -> None:
     Удаление созданных записей в БД
     """
     with session.begin():
-        session.query(User).filter(User.login == 'admin').delete()
+        session.query(User).delete()
         session.query(Permission).delete()
         session.commit()

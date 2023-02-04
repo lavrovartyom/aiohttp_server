@@ -1,5 +1,5 @@
-from models import User
-from db import session
+from app.models import User
+from app.db import session
 from aiohttp_security.abc import AbstractAuthorizationPolicy
 from passlib.hash import pbkdf2_sha256
 

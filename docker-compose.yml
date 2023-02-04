@@ -1,23 +1,25 @@
+version: "3.2"
 services:
   aiohttp-server:
     build: .
     container_name: aiohttp-server
     ports:
       - "8080:8080"
-    depends_on:
-      - pg-database
-    environment:
-      - DB_HOST=pg-database
-      - DB_NAME=dbname
-      - DB_USER=dbuser
-      - DB_PASS=pass
     command: >
       sh -c "python main.py"
+    volumes:
+      - .:/aiohttp_server
+    depends_on:
+      - postgres
 
-  pg-database:
-    image: postgres:14.6-alpine
+  postgres:
+    image: postgres:14.6
     environment:
-      - POSTGRES_DB=dbname
-      - POSTGRES_USER=dbuser
-      - POSTGRES_PASSWORD=pass
-    container_name: pg-database
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=4322
+    ports:
+      - "5432:5432"
+    container_name: postgres
+
+

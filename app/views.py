@@ -1,16 +1,16 @@
 from aiohttp import web
 from sqlalchemy.exc import IntegrityError
 from psycopg2.errors import UniqueViolation
-from models import User
-from db import session
+from app.models import User
+from app.db import session
 from aiohttp_pydantic import PydanticView
-import schemas
+from app import schemas
 from typing import List
 from aiohttp_pydantic.oas.typing import r200, r201, r202
 from passlib.hash import pbkdf2_sha256
 from aiohttp_security import forget, remember
 from aiohttp_security import check_permission, check_authorized
-from auth_policy import check_credentials
+from app.auth_policy import check_credentials
 
 
 class UserView(PydanticView):
@@ -84,7 +84,6 @@ async def get_user(request) -> r200[List[schemas.UserOut]]:
     if user:
         result = schemas.UserOut.from_orm(user).dict()
         return web.json_response(result, content_type='application/json', status=200)
-
     return web.json_response(text='Пользователь не найден', content_type='application/json', status=200)
 
 

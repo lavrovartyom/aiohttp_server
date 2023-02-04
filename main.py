@@ -1,8 +1,8 @@
 from aiohttp_session import SimpleCookieStorage, session_middleware
 from aiohttp import web
 from aiohttp_security import SessionIdentityPolicy, setup as setup_security
-from auth_policy import DBAuthorizationPolicy
-from views import AuthorizationView, UserView, get_user
+from app.auth_policy import DBAuthorizationPolicy
+from app.views import AuthorizationView, UserView, get_user
 import logging
 
 
