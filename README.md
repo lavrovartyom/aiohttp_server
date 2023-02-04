@@ -14,6 +14,7 @@
 "blocking" заблокирован
 
 # stack
+* python 3.11
 * aiohttp
 * asyncio
 * PostgreSQL
