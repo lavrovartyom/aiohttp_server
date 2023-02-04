@@ -7,7 +7,7 @@ env = Env()
 env.read_env()
 
 
-SQLALCHEMY_DATABASE_URL = f'postgresql+psycopg2://{env.str("DB_USER")}:{env.str("DB_PASSWORD")}@{env.str("PGHOST")}:{env.str("PGPORT")}/{env.str("DB_NAME")}'
+SQLALCHEMY_DATABASE_URL = f'postgresql+psycopg2://{env.str("DB_USER")}:{env.str("DB_PASSWORD")}@postgres:{env.str("PGPORT")}/{env.str("DB_NAME")}'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 

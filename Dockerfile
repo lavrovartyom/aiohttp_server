@@ -13,6 +13,4 @@ RUN pip install -r /aiohttp_server/requirements.txt
 
 WORKDIR /aiohttp_server
 
-CMD alembic upgrade head
-
 EXPOSE 8080

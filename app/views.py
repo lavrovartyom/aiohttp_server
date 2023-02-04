@@ -13,11 +13,34 @@ from aiohttp_security import check_permission, check_authorized
 from app.auth_policy import check_credentials
 
 
+class AuthorizationView(PydanticView):
+
+    async def post(self, auth_user: schemas.Authorization):
+        """
+        Авторизация пользователя по логину и паролю
+        """
+        invalid_resp = web.HTTPForbidden()
+        if await check_credentials(auth_user.login, auth_user.password):
+            response = web.HTTPFound("/")
+            await remember(self.request, response, auth_user.login)
+            raise response
+        raise invalid_resp
+
+    async def get(self):
+        """
+        Выход из системы
+        """
+        await check_authorized(self.request)
+        response = web.json_response(text='Вы вышли из системы')
+        await forget(self.request, response)
+        return response
+
+
 class UserView(PydanticView):
+
     async def get(self) -> r200[List[schemas.UserOut]]:
         """
-        Метод для получения всеx пользователей
-        :return: json response
+        Метод для получения пользователей
         """
         await check_permission(self.request, 'reading')
         users = session.query(User).all()
@@ -27,8 +50,6 @@ class UserView(PydanticView):
     async def post(self, user: schemas.UserIn) -> r201[schemas.UserOut]:
         """
         Метод для создания нового пользователя
-        :param user: данные о пользователе
-        :return: json response
         """
         await check_permission(self.request, 'admin')
         new_user = User(**user.dict())
@@ -44,7 +65,6 @@ class UserView(PydanticView):
     async def delete(self) -> r202:
         """
         Метод для удаления пользователя по id
-        :return: json response
         """
         await check_permission(self.request, 'admin')
         user_id = self.request.match_info['user_id']
@@ -55,7 +75,6 @@ class UserView(PydanticView):
     async def put(self, user: schemas.BaseUser) -> r200[schemas.UserOut]:
         """
         Метод для обновления всех данных о пользователе
-        :return: json response
         """
         await check_permission(self.request, 'admin')
         user_id = self.request.match_info['user_id']
@@ -78,29 +97,12 @@ class UserView(PydanticView):
 
 
 async def get_user(request) -> r200[List[schemas.UserOut]]:
-    """ Обработчик для получения пользователя по идентификатору """
+    """
+    Обработчик для получения пользователя по идентификатору
+    """
     await check_permission(request, 'reading')
     user = session.query(User).where(User.id == request.match_info['user_id']).one_or_none()
     if user:
         result = schemas.UserOut.from_orm(user).dict()
         return web.json_response(result, content_type='application/json', status=200)
     return web.json_response(text='Пользователь не найден', content_type='application/json', status=200)
-
-
-class AuthorizationView(PydanticView):
-
-    async def post(self, auth_user: schemas.Authorization):
-        """ Авторизация пользователя по логину и паролю """
-        invalid_resp = web.HTTPForbidden()
-        if await check_credentials(auth_user.login, auth_user.password):
-            response = web.HTTPFound("/")
-            await remember(self.request, response, auth_user.login)
-            raise response
-        raise invalid_resp
-
-    async def get(self):
-        """ Выход из системы """
-        await check_authorized(self.request)
-        response = web.json_response(text='Вы вышли из системы')
-        await forget(self.request, response)
-        return response

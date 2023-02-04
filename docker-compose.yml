@@ -15,9 +15,9 @@ services:
   postgres:
     image: postgres:14.6
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=4322
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - "5432:5432"
     container_name: postgres
