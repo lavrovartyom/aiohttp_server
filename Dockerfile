@@ -11,6 +11,6 @@ COPY main.py /aiohttp_server/
 
 RUN pip install -r /aiohttp_server/requirements.txt
 
-WORKDIR /aiohttp_server
-
 EXPOSE 8080
+
+WORKDIR /aiohttp_server
