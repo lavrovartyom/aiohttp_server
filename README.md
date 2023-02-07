@@ -3,10 +3,10 @@
 * http://localhost:8080/login - авторизация по логину и паролю
 * http://localhost:8080/logout - выход из учетной записи
 * http://localhost:8080/ - получить всех пользователей
-* http://localhost:8080/get/{id} - получить информацию о пользователе по id
+* http://localhost:8080/get/{user_id} - получить информацию о пользователе по id
 * http://localhost:8080/create - добавить пользователя
-* http://localhost:8080/delete/{id} - удалить пользователя
-* http://localhost:8080/update/ - обновить данные о пользователе
+* http://localhost:8080/delete/{user_id} - удалить пользователя
+* http://localhost:8080/update/{user_id} - обновить данные о пользователе
 
 Сервер общается только по средствам REST API.  
 У пользователя может быть одно из 3-х прав "admin", "reading", "blocking"  
