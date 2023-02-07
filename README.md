@@ -1,4 +1,5 @@
 # aiohttp server
+* http://localhost:8080/oas - сформированная документация swagger
 * http://localhost:8080/login - авторизация по логину и паролю
 * http://localhost:8080/logout - выход из учетной записи
 * http://localhost:8080/ - получить всех пользователей
@@ -15,6 +16,7 @@
 
 # stack
 * python 3.11
+* swagger
 * aiohttp
 * asyncio
 * PostgreSQL
